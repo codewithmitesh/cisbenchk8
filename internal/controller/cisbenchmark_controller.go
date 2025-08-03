@@ -80,14 +80,22 @@ func (r *CISBenchmarkReconciler) Reconcile(ctx context.Context, req ctrl.Request
 						{
 							Name:  "kube-bench",
 							Image: "aquasec/kube-bench:latest",
+							//								Command: []string{
+							//									"sh", "-c",
+							//									`
+							//	  apk add --no-cache wget jq >/dev/null && \
+							//	  kube-bench --json > /tmp/result.json && \
+							//	  jq -Rs '{text: .}' < /tmp/result.json > /tmp/slack.json && \
+							//	  wget --header='Content-Type: application/json' --method=POST --body-file=/tmp/slack.json ` + instance.Spec.SlackWebhook,
+							//								},
 							Command: []string{
 								"sh", "-c",
 								`
-								  apk add --no-cache wget >/dev/null &&
-								  kube-bench --json > /tmp/result.json &&
-								  payload=$(cat /tmp/result.json | jq -Rs '{text: .}') &&
-								  echo "$payload" > /tmp/slack.json &&
-								  wget --header='Content-Type: application/json' --method=POST --body-file=/tmp/slack.json ` + instance.Spec.SlackWebhook,
+  apk add --no-cache curl jq >/dev/null && \
+  kube-bench --json > /tmp/result.json && \
+  payload=$(jq -Rs '{text: .}' < /tmp/result.json) && \
+  curl -X POST -H "Content-Type: application/json" \
+       -d "$payload" ` + instance.Spec.SlackWebhook,
 							},
 
 							VolumeMounts: []corev1.VolumeMount{
