@@ -1,0 +1,9 @@
+apiVersion: security.miteshtank.com/v1alpha1
+kind: CISBenchmark
+metadata:
+  labels:
+    app.kubernetes.io/name: cisbench
+    app.kubernetes.io/managed-by: kustomize
+  name: cisbenchmark-sample
+spec:
+  slackWebhook: "https://hooks.slack.com/services/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"

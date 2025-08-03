@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - security.miteshtank.com
+  resources:
+  - cisbenchmarks
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - security.miteshtank.com
+  resources:
+  - cisbenchmarks/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - security.miteshtank.com
+  resources:
+  - cisbenchmarks/status
+  verbs:
+  - get
+  - patch
+  - update
